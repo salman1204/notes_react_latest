@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext } from 'react'
+import { Col, Container, Row } from 'react-bootstrap'
+import Header from './components/Header'
+import NoteForm from './components/NoteForm'
+import NoteLists from './components/NoteLists'
+import Sidebar from './components/Sidebar'
+import { ModalContext } from './contexts/ModalContext'
 
 function App() {
+  const {modal} = useContext(ModalContext)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Container fluid>
+      <Row>
+        <Col md={1} className="border-end min-vh-100">
+          <Sidebar />
+        </Col>
+        <Col>
+          <Header />
+          <NoteLists />
+        </Col>
+      </Row>
+      {modal && <NoteForm type="create"/>}
+    </Container>
+  )
 }
 
-export default App;
+export default App

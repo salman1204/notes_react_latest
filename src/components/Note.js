@@ -6,13 +6,13 @@ import { ModalContext } from '../contexts/ModalContext'
 import { NoteListContext } from '../contexts/NoteListContext'
 
 const Note = ({note}) => {
-    const {findNote} = useContext(NoteListContext)
+    const {findNote, handelDeleteNote} = useContext(NoteListContext)
     const {handleUpdateModalOpener} = useContext(ModalContext)
 
     return (
-        <Col md={4} className="d-flex justify-content-center">
+        <Col md={4} className="d-flex justify-content-center p-4">
         <div
-          className="todo__card__main mt-5 p-3 position-relative"
+          className="todo__card__main mt-4 p-3 position-relative"
           style={{ backgroundColor: `${note.color}` }}
         >
           <div className="d-flex justify-content-between mb-2">
@@ -33,7 +33,7 @@ const Note = ({note}) => {
                 <div className="d-inline-block pe-2">
                   <AiOutlineDelete
                     size={25}
-                    // onClick={() => handelDeleteNote(item.id)}
+                    onClick={() => handelDeleteNote(note.id)}
                   />
                 </div>
                 <div

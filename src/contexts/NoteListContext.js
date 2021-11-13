@@ -36,27 +36,28 @@ const NoteListContextProvider = (props) => {
     setEditItem(item)
   }
 
+  // Delete notes
+  const handelDeleteNote = id => {
+    setNoteLists(noteLists.filter(note => note.id !== id))
+  }
+
   // remove Find Note 
   const removeEditNote = () => {
     setEditItem(null)
   }
   // Edit task
-  const editNote = (title, description,hasStar, color, id) => {
+  const editNote = ({title, description,hasStar, color, id}) => {
   
     const newNotes = noteLists.map((note) =>
       (note.id === id ? { title, description,hasStar, color, id, date:currentDateFinder()} : note)
     )
-
-    // console.log(title, description,hasStar, color, id);
-    console.log(newNotes);
-
     setNoteLists(newNotes)
     setEditItem(null)
   }
 
   return (
     <NoteListContext.Provider
-      value={{ addNotes, noteLists, findNote, editItem, editNote, removeEditNote }}
+      value={{ addNotes, noteLists, findNote, editItem, editNote, removeEditNote, handelDeleteNote }}
     >
       {props.children}
     </NoteListContext.Provider>

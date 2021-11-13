@@ -7,7 +7,8 @@ import Sidebar from './components/Sidebar'
 import { ModalContext } from './contexts/ModalContext'
 
 function App() {
-  const {modal} = useContext(ModalContext)
+  const {modal,updateModal} = useContext(ModalContext)
+
   return (
     <Container fluid>
       <Row>
@@ -19,7 +20,9 @@ function App() {
           <NoteLists />
         </Col>
       </Row>
-      {modal && <NoteForm type="create"/>}
+      {modal && <NoteForm operation="create"/>}
+      {updateModal && <NoteForm operation="update"/>}
+
     </Container>
   )
 }

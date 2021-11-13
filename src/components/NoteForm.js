@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import { AiOutlineClose } from 'react-icons/ai'
 import Modal from 'react-modal'
@@ -22,16 +22,18 @@ const customStyles = {
   },
 }
 
-const NoteForm = () => {
-  const { handleModalOpener } = useContext(ModalContext)
-  const { addNotes } = useContext(NoteListContext)
+const NoteForm = ({operation}) => {
+  const { handleModalOpener, handleCloseUpdateModal } =
+    useContext(ModalContext)
+  const { addNotes, editItem, editNote, editTask } = useContext(NoteListContext)
   const [hasStar, setHasStar] = useState(false)
 
-  const [formValues, setFormValues] = useState({
+  const initialValues = {
     title: '',
     description: '',
-    hasStar: hasStar
-  })
+    hasStar: hasStar,
+  }
+  const [formValues, setFormValues] = useState(initialValues)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -40,21 +42,47 @@ const NoteForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    addNotes(formValues)
+    if (!editItem) {
+      addNotes(formValues)
+      setFormValues(initialValues)
+    } else {
+      editNote(formValues, editItem.id)
+      handleCloseUpdateModal()
+    }
   }
+
+  useEffect(() => {
+    if (editItem) {
+      setFormValues(editItem)
+    } else {
+      setFormValues(initialValues)
+    }
+  }, [editItem])
 
   return (
     <>
       <Modal
         isOpen={true}
-        onRequestClose={handleModalOpener}
+        onRequestClose={
+          operation === 'create' ? handleModalOpener : handleCloseUpdateModal
+        }
         style={customStyles}
       >
         <div className=" d-flex row align-items-center justify-content-center m-0 p-3">
           <div className="d-flex justify-content-between mb-5 pt-3">
-            <span></span>
-
-            <AiOutlineClose style={{ cursor: 'pointer' }} />
+            {operation == 'create' ? (
+              <span>New Note</span>
+            ) : (
+              <span>Update Note</span>
+            )}
+            <AiOutlineClose
+              onClick={
+                operation == 'create'
+                  ? handleModalOpener
+                  : handleCloseUpdateModal
+              }
+              style={{ cursor: 'pointer' }}
+            />
           </div>
 
           <Form onSubmit={handleSubmit}>
@@ -90,16 +118,21 @@ const NoteForm = () => {
                 label="Make this note star"
                 name="hasStar"
                 checked={hasStar}
-                onChange={()=> {
-                    formValues.hasStar = !hasStar
-                    setHasStar(!hasStar);
+                onChange={() => {
+                  formValues.hasStar = !hasStar
+                  setHasStar(!hasStar)
                 }}
               />
             </Form.Group>
             <div className="d-flex justify-content-between py-3">
               <ColorPicker handleChange={handleChange} />
-              <Button variant="dark" type="submit" className="px-5">
-                Create
+              <Button
+                variant="dark"
+                type="submit"
+                className="px-5"
+                onClick={editTask}
+              >
+                {operation === 'create' ? 'Add Task' : 'Edit Task'}
               </Button>
             </div>
           </Form>

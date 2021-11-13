@@ -2,10 +2,13 @@ import { useContext } from 'react'
 import { Col } from 'react-bootstrap'
 import { AiFillStar, AiOutlineDelete } from 'react-icons/ai'
 import { VscEdit } from 'react-icons/vsc'
+import { ModalContext } from '../contexts/ModalContext'
 import { NoteListContext } from '../contexts/NoteListContext'
 
 const Note = ({note}) => {
     const {findNote} = useContext(NoteListContext)
+    const {handleUpdateModalOpener} = useContext(ModalContext)
+
     return (
         <Col md={4} className="d-flex justify-content-center">
         <div
@@ -35,7 +38,7 @@ const Note = ({note}) => {
                 </div>
                 <div
                   className="p-2 d-inline-block rounded-circle icon__background"
-                //   onClick={handleUpdateModalOpener}
+                  onClick={handleUpdateModalOpener}
                 >
                   <VscEdit
                     color={`#FFFFFF`}
